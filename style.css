@@ -3,3 +3,14 @@ body
     background-color : pink;
     place-items : center;
 }
+h1
+{
+    text-align: center;
+}
+iframe
+{
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0 auto;
+}
