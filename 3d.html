@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>cube</title>
+    <!--顶点着色器-->
+    <script id="v-shader" type="x-shader/x-vertex">
+        attribute vec4 a_Position;
+        attribute vec4 a_Color;
+        uniform   mat4 u_Matrix;
+        uniform   vec3 u_control;
+        varying   vec4 v_Color;
+        void main()
+        {
+          vec3 angles = radians(u_control);
+          vec3 c = cos(angles);
+          vec3 s = sin(angles);
+          <!--旋转矩阵-->
+          mat4 rx = mat4 (1.0,0.0,0.0,0.0,
+                     0.0,c.x,s.x,0.0,
+                     0.0,-s.x,c.x,0.0,
+                     0.0,0.0,0.0,1.0);
+
+          mat4 ry = mat4(c.y,0.0,-s.y,0.0,
+		                 0.0,1.0, 0.0,0.0,
+		                 s.y,0.0,c.y,0.0,
+		                 0.0,0.0,0.0,1.0);
+		  mat4 rz = mat4(c.z,s.z,0.0,0.0,
+		                -s.z,c.z,0.0,0.0,
+		                 0.0,0.0,1.0,0.0,
+		                 0.0,0.0,0.0,1.0);
+
+
+          gl_Position =  u_Matrix * rz * ry * rx * a_Position;
+          gl_Position.z = -gl_Position.z;
+          v_Color = a_Color;
+        }
+    </script>
+    <!--片元着色器-->
+    <script id="f-shader" type="x-shader/x-fragment">
+
+        precision mediump float;
+
+        varying vec4 v_Color;
+        void main()
+        {
+          gl_FragColor = v_Color;
+        }
+    </script>
+   <!--调用js文件-->
+    <script type="text/javascript" src="../../libs/webgl-utils.js"></script>
+    <script type="text/javascript" src="../../libs/MV.js"></script>
+    <script type="text/javascript" src="../../libs/initShaders.js"></script>
+    <script type="text/javascript" src="../../libs/cuon-matrix.js"></script>
+    <script type="text/javascript" src="cube.js"></script>
+</head>
+<body>
+<canvas id="cube" width="618" height="618">
+</canvas>
+<br/>
+<!--在界面添加操作按钮-->
+<button id="xButton">Rotate X</button>
+<button id="yButton">Rotate Y</button>
+<button id="zButton">Rotate Z</button>
+</body>
+</html>
